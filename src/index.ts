@@ -31,7 +31,7 @@ const converter = new showdown.Converter({ ghCodeBlocks: true, omitExtraWLInCode
 async function runWorker() {
     const engine = await wllm.CreateWebWorkerMLCEngine(
         new Worker(new URL("./worker.ts", import.meta.url), { type: "module" }),
-        "Llama-3.1-8B-Instruct-q4f16_1-MLC", { initProgressCallback: (progress: any) => { term.writeln(progress.text); document.getElementById("progress-bar").value = progress.progress; } }
+        "Llama-3.2-1B-Instruct-q4f32_1-MLC", { initProgressCallback: (progress: any) => { term.writeln(progress.text); document.getElementById("progress-bar").value = progress.progress; } }
     );
 
     const artyom = new Artyom();
@@ -40,9 +40,7 @@ async function runWorker() {
 
     setTimeout(function () {// if you use artyom.fatality , wait 250 ms to initialize again.
         artyom.initialize({
-            lang: "en-GB",// A lot of languages are supported. Read the docs !
-            continuous: true,// recognize 1 command and stop listening !
-            listen: true, // Start recognizing
+            lang: "en-US",// A lot of languages are supported. Read the docs !
             debug: false, // Show everything in the console
             speed: 1 // talk normally
         }).then(function () {
@@ -55,19 +53,24 @@ async function runWorker() {
         { role: "user", content: "Introduce yourself" },
     ]
 
-    artyom.newDictation({
-        continuous: true, // Enable continuous if HTTPS connection
+    let query = ""
+
+    const listen = () => artyom.newDictation({
+        continuous: true,
+        soundx: true,
         onResult: function (text: string) {
-            messages.push({role: "assistant", content: text})
-            respond(engine, messages, artyom);
+            if (text === "") {
+
+                term.writeln(query);
+                messages.push({ role: "user", content: query })
+                respond(engine, messages, artyom);
+            }
+            query = text;
+            term.writeln(text);
         },
-        onStart: function () {
-            console.log("Dictation started by the user");
-        },
-        onEnd: function () {
-            respond
-        }
-    });
+    }).start();
+
+    listen();
 
     await respond(engine, messages, artyom);
 }
