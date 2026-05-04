@@ -60,13 +60,11 @@ async function runWorker() {
         soundx: true,
         onResult: function (text: string) {
             if (text === "") {
-
                 term.writeln(query);
                 messages.push({ role: "user", content: query })
                 respond(engine, messages, artyom);
             }
             query = text;
-            term.writeln(text);
         },
     }).start();
 
