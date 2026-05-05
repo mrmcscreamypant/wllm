@@ -27,11 +27,13 @@ wllm.prebuiltAppConfig.model_list.map(model => model.model_id).forEach(id => con
 document.getElementById("loading-progress")?.addEventListener("resize", () => fitAddon.fit());
 
 const converter = new showdown.Converter({ ghCodeBlocks: true, omitExtraWLInCodeBlocks: true, smoothLivePreview: true, emoji: true });
+converter.setFlavor("github");
 
 async function runWorker() {
     const engine = await wllm.CreateWebWorkerMLCEngine(
         new Worker(new URL("./worker.ts", import.meta.url), { type: "module" }),
-        "Llama-3.2-1B-Instruct-q4f32_1-MLC", { initProgressCallback: (progress: any) => { term.clear(); term.writeln(progress.text); document.getElementById("progress-bar").value = progress.progress; } }
+        "Qwen3-0.6B-q4f16_1-MLC",
+        { initProgressCallback: (progress: any) => { term.clear(); term.writeln(progress.text); document.getElementById("progress-bar").value = progress.progress; } }
     );
 
     const artyom = new Artyom();
@@ -68,18 +70,31 @@ async function runWorker() {
         },
     }).start();
 
-    listen();
+    //listen();
 
-    await respond(engine, messages, artyom);
+    const input = document.getElementById("input");
+
+    input?.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            messages.push({ role: "user", content: input.value })
+            input.value = ""
+            respond(engine, messages, artyom);
+        }
+    })
+
+    //await respond(engine, messages, artyom);
 }
 
 async function respond(engine: wllm.WebWorkerMLCEngine, messages: wllm.ChatCompletionMessageParam[], artyom: Artyom) {
-    /*const chunks = await engine.chat.completions.create({
+    const chunks = await engine.chat.completions.create({
         messages,
         temperature: 1,
         stream: true,
         stream_options: { include_usage: true },
-    });*/
+        extra_body: {
+            enable_thinking: true
+        }
+    });
 
     let result = "";
     for await (const chunk of chunks) {

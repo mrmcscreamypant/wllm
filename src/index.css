@@ -9,11 +9,20 @@ body {
     margin: 0px;
 }
 
+think {
+    color: red;
+}
+
 #output-container,
 #loading-progress {
     margin: 2%;
     width: 100%;
     scrollbar-width: none;
+}
+
+#output-container {
+    display: flex;
+    flex-direction: column;
 }
 
 #progress-bar {
