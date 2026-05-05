@@ -98,9 +98,13 @@ async function respond(engine: wllm.WebWorkerMLCEngine, messages: wllm.ChatCompl
 
     let result = "";
     for await (const chunk of chunks) {
+        let thinking = result.includes("<think>") && !result.includes("</think>");
+        if (thinking) {
+            term.write(chunk.choices[0]?.delta.content || "NULL");
+        }
         result += chunk.choices[0]?.delta.content || "";
         //@ts-ignore
-        document.getElementById("output").innerHTML = converter.makeHtml(result);
+        document.getElementById("output").innerHTML = converter.makeHtml(result.replace(/<think>.*?((<\/think>)|$)/s, "thinking..."));
     }
 
     const fullReply = await engine.getMessage();
