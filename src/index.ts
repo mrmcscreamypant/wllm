@@ -9,7 +9,7 @@ import '@xterm/xterm/css/xterm.css';
 import { FitAddon } from "@xterm/addon-fit";
 
 const fitAddon = new FitAddon();
-const term = new xterm.Terminal({ fontFamily: "monospace" });
+const term = new xterm.Terminal({ fontFamily: "'monospace'" });
 term.loadAddon(fitAddon);
 //@ts-ignore
 term.open(document.getElementById("loading-progress"));
@@ -17,7 +17,7 @@ fitAddon.fit();
 
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register(
-        new URL("sw.ts", import.meta.url),  // worker script
+        new URL("sw.ts", import.meta.url),
         { type: "module" },
     );
 }
@@ -31,25 +31,25 @@ const converter = new showdown.Converter({ ghCodeBlocks: true, omitExtraWLInCode
 async function runWorker() {
     const engine = await wllm.CreateWebWorkerMLCEngine(
         new Worker(new URL("./worker.ts", import.meta.url), { type: "module" }),
-        "Llama-3.2-1B-Instruct-q4f32_1-MLC", { initProgressCallback: (progress: any) => { term.writeln(progress.text); document.getElementById("progress-bar").value = progress.progress; } }
+        "Llama-3.2-1B-Instruct-q4f32_1-MLC", { initProgressCallback: (progress: any) => { term.clear(); term.writeln(progress.text); document.getElementById("progress-bar").value = progress.progress; } }
     );
 
     const artyom = new Artyom();
 
-    artyom.fatality();// use this to stop any of
+    artyom.fatality();
 
-    setTimeout(function () {// if you use artyom.fatality , wait 250 ms to initialize again.
+    setTimeout(function () {
         artyom.initialize({
-            lang: "en-US",// A lot of languages are supported. Read the docs !
-            debug: false, // Show everything in the console
-            speed: 1 // talk normally
+            lang: "en-US",
+            debug: false,
+            speed: 1,
         }).then(function () {
             console.log("Ready to work !");
         });
     }, 250);
 
     const messages: wllm.ChatCompletionMessageParam[] = [
-        { role: "system", content: "You are an AI assistant. You search the web for information and report on it." },
+        { role: "system", content: "You are an AI assistant. Keep your answers to a sentance or two." },
         { role: "user", content: "Introduce yourself" },
     ]
 
@@ -74,12 +74,12 @@ async function runWorker() {
 }
 
 async function respond(engine: wllm.WebWorkerMLCEngine, messages: wllm.ChatCompletionMessageParam[], artyom: Artyom) {
-    const chunks = await engine.chat.completions.create({
+    /*const chunks = await engine.chat.completions.create({
         messages,
         temperature: 1,
         stream: true,
         stream_options: { include_usage: true },
-    });
+    });*/
 
     let result = "";
     for await (const chunk of chunks) {
