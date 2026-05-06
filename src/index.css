@@ -1,10 +1,13 @@
 body {
+    margin: 0px;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#display{
     position: absolute;
     top: 0px;
     left: 0px;
-    display: flex;
-    width: 100vw;
-    overflow: hidden;
-    height: 100vh;
-    margin: 0px;
+    border: 2px solid green;
 }
