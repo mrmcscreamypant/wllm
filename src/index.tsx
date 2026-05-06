@@ -7,8 +7,8 @@ import { WebGPURendererParameters } from 'three/src/renderers/webgpu/WebGPURende
 import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
 
 function CSSRendererComponent({ displayRef }: { displayRef: React.RefObject<HTMLCanvasElement> }): null {
-    let CSSRenderer: CSS3DRenderer;
-    React.useEffect(() => { CSSRenderer = new CSS3DRenderer({ element: displayRef.current }); }, []);
+    const [CSSRenderer, setCSSRenderer] = React.useState<CSS3DRenderer>();
+    React.useEffect(() => { setCSSRenderer(new CSS3DRenderer({ element: displayRef.current })); }, []);
     Fiber.useFrame(({ gl, scene, camera }) => {
         gl.render(scene, camera);
         CSSRenderer?.render(scene, camera);
