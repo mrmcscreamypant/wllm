@@ -52,7 +52,7 @@ export default function Bot(): React.JSX.Element {
 
         backend.chat.completions.create({
             messages,
-            temperature: 0.35,
+            temperature: 0.2,
             stream: true,
             stream_options: { include_usage: true },
             extra_body: {

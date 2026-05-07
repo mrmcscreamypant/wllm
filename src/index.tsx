@@ -26,7 +26,7 @@ function App(): React.JSX.Element {
                 return renderer;
             }}>
             <DREI.AdaptiveDpr pixelated />
-            <pointLight position={[20, 20, 20]} intensity={10000} />
+            <pointLight position={[4, 4, 4]} intensity={300} />
             <DREI.CameraControls />
             <Bot />
         </Fiber.Canvas>
