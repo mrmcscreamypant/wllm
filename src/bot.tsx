@@ -10,6 +10,10 @@ if ("serviceWorker" in navigator) {
     ).catch(e => { throw e; });
 }
 
+for (const model of WLLM.prebuiltAppConfig.model_list) {
+    console.log(model.model_id);
+}
+
 export default function Bot({ onOutputChange }: { onOutputChange: (value: string) => void }): React.JSX.Element {
     const [output, setOutput] = React.useState("");
     React.useEffect(() => onOutputChange(output), [output]);
@@ -21,14 +25,16 @@ export default function Bot({ onOutputChange }: { onOutputChange: (value: string
     React.useEffect(() => {
         WLLM.CreateWebWorkerMLCEngine(
             new Worker(new URL("./worker.ts", import.meta.url), { type: "module" }),
-            "Qwen3-0.6B-q4f16_1-MLC",
+            "SmolLM2-135M-Instruct-q0f16-MLC",
             { initProgressCallback: setProgress }
         ).then(async (value) => {
             backend.current = value;
+
             const messages: WLLM.ChatCompletionMessageParam[] = [
-                { role: "system", content: "You are an AI assistant. Keep your answers to a sentance or two." },
-                { role: "user", content: "Write a python hello world program. Explain what it does." },
+                { role: "system", content: "You are an AI assistant." },
+                { role: "user", content: "What is the meaning of life? Give a long and thought out answer." },
             ];
+
             const chunks = await backend.current.chat.completions.create({
                 messages,
                 temperature: 1,
@@ -47,7 +53,7 @@ export default function Bot({ onOutputChange }: { onOutputChange: (value: string
         }).catch(e => { throw e; });
     }, []);
 
-    return <group position={[5, 0, 2]}>
+    return <group position={[8.01, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
         <Panel className="progress-panel">
             <progress value={progress?.progress} />
             <div>{progress?.text}</div>

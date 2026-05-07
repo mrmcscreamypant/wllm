@@ -13,14 +13,27 @@ body {
 }
 
 .panel {
-    width: calc(75px*var(--panel-width));
-    height: calc(75px*var(--panel-height));
+    width: calc(40px*var(--panel-width));
+    height: calc(40px*var(--panel-height));
     overflow-y: scroll;
+    font-size: 20px;
+    -webkit-font-smoothing: subpixel-antialiased;
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
 
 .progress-panel {
-    --panel-width: 2;
-    --panel-height: 2;
+    --panel-width: 16;
+    --panel-height: 16;
     display: flex;
     flex-direction: column;
+}
+
+.output-panel {
+    --panel-width: 16;
+    --panel-height: 16;
+}
+
+progress {
+    width: 100%;
 }

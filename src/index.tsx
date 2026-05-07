@@ -26,10 +26,9 @@ function Output({ response }: { response: string }): React.JSX.Element {
     const outputRef = React.useRef(null);
     React.useEffect(() => {
         const md = mdConverter.makeHtml(response);
-        console.log(md);
         if (outputRef.current) outputRef.current.innerHTML = md;
     }, [response]);
-    return <group position={[0, 0, 1.1]}><Panel><div ref={outputRef} className='output' /></Panel></group>;
+    return <group position={[0, 0, 8.01]}><Panel className='output-panel'><div className='output' ref={outputRef} /></Panel></group>;
 }
 
 function App(): React.JSX.Element {
@@ -52,15 +51,16 @@ function App(): React.JSX.Element {
                 return renderer;
             }}>
             <CSSRendererComponent displayRef={displayRef} />
-            <pointLight position={[2, 2, 2]} intensity={100} />
+            <pointLight position={[20, 20, 20]} intensity={100000} />
             <DREI.CameraControls />
-            <mesh>
+            <mesh scale={16}>
                 <boxGeometry />
                 <meshStandardMaterial color="green" />
             </mesh>
             <Bot onOutputChange={setOutput} />
             <Output response={output} />
-        </Fiber.Canvas></>;
+        </Fiber.Canvas>
+    </>;
 }
 
 createRoot(document.getElementById("root")).render(<App />);
