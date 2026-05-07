@@ -5,9 +5,22 @@ body {
     overflow: hidden;
 }
 
-#display{
+#display {
     position: absolute;
     top: 0px;
     left: 0px;
     border: 2px solid green;
+}
+
+.panel {
+    width: calc(75px*var(--panel-width));
+    height: calc(75px*var(--panel-height));
+    overflow-y: scroll;
+}
+
+.progress-panel {
+    --panel-width: 2;
+    --panel-height: 2;
+    display: flex;
+    flex-direction: column;
 }

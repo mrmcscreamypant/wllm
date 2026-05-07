@@ -53,9 +53,9 @@ async function runWorker() {
     const messages: wllm.ChatCompletionMessageParam[] = [
         { role: "system", content: "You are an AI assistant. Keep your answers to a sentance or two." },
         { role: "user", content: "Introduce yourself" },
-    ]
+    ];
 
-    let query = ""
+    let query = "";
 
     const listen = () => artyom.newDictation({
         continuous: true,
@@ -76,8 +76,8 @@ async function runWorker() {
 
     input?.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
-            messages.push({ role: "user", content: input.value })
-            input.value = ""
+            messages.push({ role: "user", content: input.value });
+            input.value = "";
             respond(engine, messages, artyom);
         }
     })
