@@ -1,6 +1,5 @@
 import React from 'react';
 import * as WLLM from '@mlc-ai/web-llm';
-import * as THREE from 'three';
 import Panel from './panel';
 import Showdown from "showdown";
 
@@ -47,24 +46,23 @@ export default function Bot(): React.JSX.Element {
 
         const messages: WLLM.ChatCompletionMessageParam[] = [
             { role: "system", content: "You are an AI assistant." },
-            { role: "user", content: "Who are you?" },
+            { role: "user", content: "What is your name?" },
         ];
 
         backend.chat.completions.create({
             messages,
-            temperature: 0.2,
+            temperature: 0.1,
+            repetition_penalty: 3,
             stream: true,
             stream_options: { include_usage: true },
-            extra_body: {
-                enable_thinking: false
-            }
+            extra_body: { enable_thinking: false },
         }).then(async (chunks): Promise<void> => {
             let result = "";
             for await (const chunk of chunks) {
                 result += chunk.choices[0]?.delta.content || "";
                 setOutput(result);
-                if (chunk.usage?.total_tokens) {
-                    console.log(chunk.usage?.total_tokens);
+                if (chunk?.usage) {
+                    console.log(chunk.usage);
                 }
             }
         }).catch(e => { throw e; });
