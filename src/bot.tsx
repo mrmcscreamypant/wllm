@@ -23,7 +23,7 @@ function Output({ response }: { response: string }): React.JSX.Element {
         const md = mdConverter.makeHtml(response);
         if (outputRef.current) outputRef.current.innerHTML = md;
     }, [response]);
-    return <group position={[0, 0, 0.51]}><Panel className='output-panel'><div className='output' ref={outputRef} /></Panel></group>;
+    return <group position={[0, 0, 0.501]}><Panel className='output-panel'><div className='output' ref={outputRef} /></Panel></group>;
 }
 
 
@@ -52,7 +52,7 @@ export default function Bot(): React.JSX.Element {
 
         backend.chat.completions.create({
             messages,
-            temperature: 0.3,
+            temperature: 0.35,
             stream: true,
             stream_options: { include_usage: true },
             extra_body: {
@@ -73,7 +73,7 @@ export default function Bot(): React.JSX.Element {
     return <mesh>
         <boxGeometry />
         <meshStandardMaterial color="green" />
-        <group position={[0.51, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
+        <group position={[0.501, 0, 0]} rotation={[0, Math.PI / 2, 0]}>
             <Panel className="progress-panel">
                 <progress value={progress?.progress} />
                 <div>{progress?.text}</div>

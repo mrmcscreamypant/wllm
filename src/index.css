@@ -13,8 +13,8 @@ body {
 }
 
 .panel {
-    width: calc(39px*16*var(--panel-width));
-    height: calc(39px*16*var(--panel-height));
+    width: calc(40px*16*var(--panel-width));
+    height: calc(40px*16*var(--panel-height));
     padding: 0px;
     overflow-y: scroll;
     font-size: 20px;
